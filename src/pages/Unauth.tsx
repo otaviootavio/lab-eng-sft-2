@@ -4,14 +4,10 @@ import LastPost from "~/components/LastPost";
 import NavBar from "~/components/NavBar";
 import PostForm from "~/components/PostForm";
 import PostsList from "~/components/PostList";
-import Unauth from "./Unauth";
 
-export default function Home() {
+export default function Unauth() {
   const { data: sessionData } = useSession();
 
-  if (!sessionData?.user) {
-    return <Unauth />;
-  }
   return (
     <>
       <Head>
@@ -21,10 +17,13 @@ export default function Home() {
       </Head>
       <NavBar />
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="items-top container flex flex-row justify-center gap-2 px-4 py-16 ">
-          <LastPost />
-          <PostForm />
-          <PostsList />
+        <div className="container flex flex-col items-center justify-center gap-2 px-4 py-16 ">
+          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+            Pluma <span className="text-[hsl(280,100%,70%)]">fit</span>
+          </h1>
+          <p className="text-xl tracking-tight text-white">
+            Faça login para continuar
+          </p>
         </div>
       </main>
     </>

@@ -8,15 +8,7 @@ function LastPost() {
     enabled: sessionData?.user !== undefined,
   });
 
-  if (!sessionData) {
-    return <div>Unauthorized</div>;
-  }
-
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <div>{data.isLoading ? "Loading..." : <Post Post={data.data} />}</div>
-    </div>
-  );
+  return <div>{<Post Post={data.data} />}</div>;
 }
 
 export default LastPost;

@@ -8,16 +8,12 @@ const PostsList = () => {
   const { data: posts } = api.post.getAllUserPost.useQuery(undefined, {
     enabled: sessionData?.user !== undefined,
   });
-
-  if (!posts) {
-    return <div className="space-y-4">No data</div>;
-  }
   return (
     <div className="space-y-4">
-      {posts.length > 0 ? (
-        posts.map((post) => <Post key={post.id} Post={post} />)
+      {posts && posts.length > 0 ? (
+        posts?.map((post) => <Post key={post.id} Post={post} />)
       ) : (
-        <p>No posts available</p>
+        <Post Post={null} />
       )}
     </div>
   );

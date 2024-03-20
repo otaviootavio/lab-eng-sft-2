@@ -20,7 +20,7 @@ const Post = (props: Props) => {
     `${formatDistanceToNow(new Date(date))} ago`;
 
   return (
-    <div className="mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl">
+    <div className="mx-auto overflow-hidden rounded-xl bg-white shadow-md">
       <div className="p-8">
         {!!Post ? (
           <>
