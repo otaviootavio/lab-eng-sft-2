@@ -29,7 +29,14 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  getLatest: protectedProcedure.query(({ ctx }) => {
+  getAllUserPost: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.post.findMany({
+      orderBy: { createdAt: "desc" },
+      where: { createdBy: { id: ctx.session.user.id } },
+    });
+  }),
+
+  getLatest: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.post.findFirst({
       orderBy: { createdAt: "desc" },
       where: { createdBy: { id: ctx.session.user.id } },
