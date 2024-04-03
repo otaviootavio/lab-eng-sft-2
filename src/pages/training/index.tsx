@@ -8,8 +8,8 @@ import { api } from "~/utils/api";
 const CreateTraining = () => {
   const { refetch } = api.trainingTemplate.getAllTrainingTemplates.useQuery();
 
-  const handleTrainingCreated = () => {
-    refetch();
+  const handleTrainingCreated = async () => {
+    await refetch();
   };
 
   return (

@@ -3,6 +3,7 @@ import Head from "next/head";
 import NavBar from "~/components/NavBar";
 import Unauth from "./Unauth";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   const { data: sessionData } = useSession();
@@ -38,18 +39,18 @@ export default function Home() {
             />
           </div>
           <div className="mt-10 text-center">
-            <a
+            <Link
               href="/training"
               className="rounded-lg bg-[#f0ad4e] px-4 py-2 font-semibold text-[#2e026d] transition duration-300 ease-in-out hover:bg-[#f7c978]"
             >
               Discover Training
-            </a>
-            <a
+            </Link>
+            <Link
               href="/agenda"
               className="ml-4 rounded-lg bg-[#f0ad4e] px-4 py-2 font-semibold text-[#2e026d] transition duration-300 ease-in-out hover:bg-[#f7c978]"
             >
               View Agenda
-            </a>
+            </Link>
           </div>
         </div>
 

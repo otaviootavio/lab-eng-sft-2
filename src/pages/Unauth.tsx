@@ -1,13 +1,7 @@
-import { useSession } from "next-auth/react";
 import Head from "next/head";
-import LastPost from "~/components/LastPost";
 import NavBar from "~/components/NavBar";
-import PostForm from "~/components/PostForm";
-import PostsList from "~/components/PostList";
 
 export default function Unauth() {
-  const { data: sessionData } = useSession();
-
   return (
     <>
       <Head>
