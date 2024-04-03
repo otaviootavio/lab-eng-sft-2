@@ -1,63 +1,108 @@
 import React from "react";
 import { api } from "~/utils/api";
 
-const AppointmentForm = ({
+interface AppointmentFormProps {
+  onAppointmentCreated: () => void;
+}
+
+const AppointmentForm: React.FC<AppointmentFormProps> = ({
   onAppointmentCreated,
-}: {
-  onAppointmentCreated: any;
 }) => {
-  const { mutate, error, isSuccess } =
+  const trainingTemplatesQuery =
+    api.trainingTemplate.getAllTrainingTemplates.useQuery();
+  const createAppointmentMutation =
     api.appointment.createAppointment.useMutation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const title = formData.get("title") as string;
-    const startTime = new Date(formData.get("start") as string);
-    const endTime = new Date(formData.get("end") as string);
 
-    mutate(
-      { title, startTime, endTime },
+    const title = formData.get("title") as string;
+    const startTime = formData.get("start")
+      ? new Date(formData.get("start") as string)
+      : null;
+    const endTime = formData.get("end")
+      ? new Date(formData.get("end") as string)
+      : null;
+    const trainingTemplateId = formData.get("trainingTemplateId")
+      ? parseInt(formData.get("trainingTemplateId") as string)
+      : null;
+
+    if (
+      !title ||
+      !startTime ||
+      !endTime ||
+      isNaN(trainingTemplateId ?? 0) ||
+      !trainingTemplateId
+    ) {
+      console.error("Invalid form data");
+      return;
+    }
+
+    createAppointmentMutation.mutate(
+      { title, startTime, endTime, trainingTemplateId },
       {
         onSuccess: () => {
-          onAppointmentCreated?.();
+          onAppointmentCreated();
         },
       },
     );
   };
 
+  if (trainingTemplatesQuery.isLoading) return <p>Loading...</p>;
+  if (trainingTemplatesQuery.error)
+    return (
+      <p>Error fetching templates: {trainingTemplatesQuery.error.message}</p>
+    );
+
   return (
-    <div className="rounded-xl bg-white p-6 shadow-md">
-      <form className="flex flex-col gap-7" onSubmit={handleSubmit}>
+    <div className="mx-auto max-w-lg rounded-xl bg-gradient-to-r from-green-500 to-blue-600 p-6 shadow-lg">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-white">
         <input
           name="title"
+          placeholder="Workout Title (e.g., Leg Day)"
           className="rounded-md px-4 py-2 text-black"
-          placeholder="Appointment Title"
+          required
         />
         <input
           name="start"
           type="datetime-local"
           className="rounded-md px-4 py-2 text-black"
-          placeholder="Start Time"
+          required
         />
         <input
           name="end"
           type="datetime-local"
           className="rounded-md px-4 py-2 text-black"
-          placeholder="End Time"
+          required
         />
-        {error && <span className="text-red-500">Error: {error.message}</span>}
-        {isSuccess && (
-          <span className="text-green-500">
-            Appointment created successfully!
-          </span>
-        )}
+        <select
+          name="trainingTemplateId"
+          className="rounded-md px-4 py-2 text-black"
+          defaultValue=""
+          required
+        >
+          <option value="">Select Training Template</option>
+          {trainingTemplatesQuery.data?.map((template) => (
+            <option key={template.id} value={template.id}>
+              {template.name}
+            </option>
+          ))}
+        </select>
         <button
           type="submit"
-          className="rounded-md bg-[#15162c] px-4 py-2 text-white transition-colors hover:bg-[#3A3480]"
+          className="mt-4 rounded-md bg-[#15162c] px-4 py-2 transition-colors hover:bg-[#3A3480] hover:shadow-lg"
         >
-          Submit
+          Schedule Workout
         </button>
+        {createAppointmentMutation.error && (
+          <p className="mt-2 text-red-400">
+            Error: {createAppointmentMutation.error.message}
+          </p>
+        )}
+        {createAppointmentMutation.isSuccess && (
+          <p className="mt-2 text-green-400">Workout scheduled successfully!</p>
+        )}
       </form>
     </div>
   );

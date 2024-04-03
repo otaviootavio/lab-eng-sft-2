@@ -24,6 +24,15 @@ export const appointmentRouter = createTRPCRouter({
         throw new Error("The start time must be before the end time.");
       }
 
+      if (input.trainingTemplateId) {
+        const templateExists = await ctx.db.trainingTemplate.findUnique({
+          where: { id: input.trainingTemplateId },
+        });
+        if (!templateExists) {
+          throw new Error("Training template does not exist.");
+        }
+      }
+
       return ctx.db.appointment.create({
         data: {
           title: input.title,
