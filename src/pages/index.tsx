@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Risco Maromba</title>
+        <title>LAB ENG SOFT 2</title>
         <meta
           name="description"
           content="Revolutionizing Fitness Training and Management"
